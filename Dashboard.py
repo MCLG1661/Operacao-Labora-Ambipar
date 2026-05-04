@@ -19,6 +19,7 @@ st.markdown("---")
 @st.cache_data
 def carregar_dados():
     df = pd.read_excel('PLANILHA DE RECOLHA DE NOTAS.xlsx', engine='openpyxl')
+    
     # Renomeia as colunas para facilitar
     df.columns = ['POSTO', 'B', 'C', 'CNPJ_AMBIPAR', 'E', 'F', 'NOTAS_POR_POSTO', 'H', 'I', 'VALOR_TOTAL_RECOLHIDO']
     
