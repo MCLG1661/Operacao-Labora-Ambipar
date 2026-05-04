@@ -16,25 +16,22 @@
 ## 📁 Estrutura da Planilha
 O dashboard espera uma planilha Excel com as seguintes colunas :
 
-````
-Coluna	Descrição
-A	      POSTO (nome do posto)
-D	      CNPJ AMBIPAR
-G	      NOTAS POR POSTO
-J	      VALOR TOTAL RECOLHIDO
+Colunas :
 
-```
+- A	POSTO (nome do posto)
+- D CNPJ AMBIPAR
+- G	NOTAS POR POSTO
+- J VALOR TOTAL RECOLHIDO
 
 ## 📦 Tecnologias Utilizadas
 
-```  
-Tecnologia	Finalidade
-Streamlit	  Interface do dashboard
-Pandas	    Manipulação e análise de dados
-Plotly	    Gráficos interativos
-OpenPyXL	  Leitura de arquivos Excel
+  
+Tecnologia & Finalidade :
 
-```
+- Streamlit : Interface do dashboard
+- Pandas : Manipulação e análise de dados
+- Plotly: Gráficos interativos
+- OpenPyXL : Leitura de arquivos Excel
 
 ## 📸 Preview do Dashboard
 
