@@ -59,5 +59,15 @@ Exportação :
 - CSV com dados por Posto
 - CSV com dados por CNPJ
 
+## 👤 Autor
+
+Marcus
+💼 Marketing & Data Science
+📍 Rio de Janeiro
+
+🔗 GitHub: [https://github.com/MCLG1661]
+
+🔗 LinkedIn: [https://www.linkedin.com/in/marcusguedes/]
+
 
 
