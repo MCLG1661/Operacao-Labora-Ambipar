@@ -3,32 +3,49 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import openpyxl
+from PIL import Image
 
-# Configuração da página
+# ==================== FUNÇÃO PARA FORMATAR MOEDA ====================
+def formatar_real(valor):
+    """Formata um número para o padrão Real Brasileiro (R$ 1.234,56)"""
+    if pd.isna(valor) or valor == 0:
+        return "R$ 0,00"
+    return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+# ==================== CONFIGURAÇÃO DA PÁGINA ====================
+st.set_page_config(
+    page_title="Dashboard LABORA/AMBIPAR",
+    page_icon="📊",
+    layout="wide"
+)
+
+# ==================== LOGO NA BARRA LATERAL ====================
 with st.sidebar:
     try:
-        logo = Image.open('Labora_Logo_Novo_1_Laranja@2x.png')
+        logo = Image.open('logo_ambipar.png')
         st.image(logo, use_container_width=True)
     except:
-        st.image("https://via.placeholder.com/200x100?text=LABORA/AMBIPAR", use_container_width=True)
+        st.image("https://via.placeholder.com/300x100?text=LABORA/AMBIPAR", use_container_width=True)
     
     st.markdown("---")
-    st.markdown("### 📊 Dashboard de Análise")
-    st.caption("Dados de recolha de notas fiscais")
+    st.caption("📊 Dashboard de Análise de Dados")
+    st.caption(f"📅 Última atualização: Abril 2025")
 
 # ==================== TÍTULO PRINCIPAL ====================
 st.title("📊 LABORA/AMBIPAR - ANÁLISE DE DADOS")
 st.markdown("---")
 
-# Carrega a planilha
+# ==================== CARREGAR DADOS ====================
 @st.cache_data
 def carregar_dados():
-    df = pd.read_excel('PLANILHA DE RECOLHA DE NOTAS.xlsx', engine='openpyxl')
-    
-    # Renomeia as colunas para facilitar
+    df = pd.read_excel(
+        'PLANILHA DE RECOLHA DE NOTAS.xlsx',
+        engine='openpyxl'
+    )
+    # Renomeia as colunas
     df.columns = ['POSTO', 'B', 'C', 'CNPJ_AMBIPAR', 'E', 'F', 'NOTAS_POR_POSTO', 'H', 'I', 'VALOR_TOTAL_RECOLHIDO']
     
-    # Remove linhas vazias (última linha com SUM)
+    # Remove linhas vazias
     df = df.dropna(subset=['POSTO', 'NOTAS_POR_POSTO', 'VALOR_TOTAL_RECOLHIDO'])
     
     # Converte para numérico
@@ -58,13 +75,13 @@ with col3:
 
 with col4:
     total_recolhido = df['VALOR_TOTAL_RECOLHIDO'].sum()
-    st.metric("💰 Valor Total Recolhido", f"R$ {total_recolhido:,.2f}")
+    st.metric("💰 Valor Total Recolhido", formatar_real(total_recolhido))
 
 st.markdown("---")
 
 # ==================== GRÁFICOS ====================
 
-# Layout com 2 colunas para os gráficos
+# Layout com 2 colunas
 col_esq, col_dir = st.columns(2)
 
 # Gráfico 1: Top 10 postos com maior valor recolhido
@@ -72,6 +89,9 @@ with col_esq:
     st.subheader("🏆 Top 10 Postos - Maior Recolhimento")
     top_valor = df.groupby('POSTO')['VALOR_TOTAL_RECOLHIDO'].sum().reset_index()
     top_valor = top_valor.sort_values('VALOR_TOTAL_RECOLHIDO', ascending=False).head(10)
+    
+    # Criar coluna com valor formatado para exibição
+    top_valor['VALOR_FORMATADO'] = top_valor['VALOR_TOTAL_RECOLHIDO'].apply(formatar_real)
     
     fig1 = px.bar(
         top_valor, 
@@ -81,9 +101,10 @@ with col_esq:
         title="Top 10 Postos por Valor Recolhido (R$)",
         color='VALOR_TOTAL_RECOLHIDO',
         color_continuous_scale='Blues',
-        text_auto='.2s'
+        text='VALOR_FORMATADO'
     )
     fig1.update_layout(height=500, yaxis={'categoryorder':'total ascending'})
+    fig1.update_traces(textposition='outside')
     st.plotly_chart(fig1, use_container_width=True)
 
 # Gráfico 2: Top 10 CNPJs com maior valor recolhido
@@ -95,11 +116,14 @@ with col_dir:
     }).reset_index()
     top_cnpj_valor = top_cnpj_valor.sort_values('VALOR_TOTAL_RECOLHIDO', ascending=False).head(10)
     
-    # Formata o CNPJ para exibição (XX.XXX.XXX/XXXX-XX)
+    # Formata o CNPJ
     top_cnpj_valor['CNPJ_FORMATADO'] = top_cnpj_valor['CNPJ_AMBIPAR'].astype(str).str.zfill(14)
     top_cnpj_valor['CNPJ_FORMATADO'] = top_cnpj_valor['CNPJ_FORMATADO'].str.replace(
         r'(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})', r'\1.\2.\3/\4-\5', regex=True
     )
+    
+    # Criar coluna com valor formatado
+    top_cnpj_valor['VALOR_FORMATADO'] = top_cnpj_valor['VALOR_TOTAL_RECOLHIDO'].apply(formatar_real)
     
     fig2 = px.bar(
         top_cnpj_valor,
@@ -109,9 +133,10 @@ with col_dir:
         title="Top 10 CNPJs por Valor Recolhido (R$)",
         color='VALOR_TOTAL_RECOLHIDO',
         color_continuous_scale='Purples',
-        text_auto='.2s'
+        text='VALOR_FORMATADO'
     )
     fig2.update_layout(height=500, yaxis={'categoryorder':'total ascending'})
+    fig2.update_traces(textposition='outside')
     st.plotly_chart(fig2, use_container_width=True)
 
 # ==================== SEGUNDA LINHA DE GRÁFICOS ====================
@@ -132,9 +157,10 @@ with col_notas:
         title="Top 10 Postos por Quantidade de Notas",
         color='NOTAS_POR_POSTO',
         color_continuous_scale='Greens',
-        text_auto=True
+        text='NOTAS_POR_POSTO'
     )
     fig3.update_layout(height=500, yaxis={'categoryorder':'total ascending'})
+    fig3.update_traces(textposition='outside')
     st.plotly_chart(fig3, use_container_width=True)
 
 # Gráfico 4: Top 10 CNPJs com mais notas fiscais
@@ -160,31 +186,27 @@ with col_cnpj_notas:
         title="Top 10 CNPJs por Quantidade de Notas",
         color='NOTAS_POR_POSTO',
         color_continuous_scale='Oranges',
-        text_auto=True
+        text='NOTAS_POR_POSTO'
     )
     fig4.update_layout(height=500, yaxis={'categoryorder':'total ascending'})
+    fig4.update_traces(textposition='outside')
     st.plotly_chart(fig4, use_container_width=True)
 
-# ==================== TABELAS COMPLETAS ====================
-
 st.markdown("---")
+
+# ==================== ANÁLISE COMPLETA POR POSTO ====================
 st.subheader("📋 ANÁLISE COMPLETA POR POSTO")
 
-# Agrupa os dados por posto
 df_agrupado = df.groupby('POSTO').agg({
     'CNPJ_AMBIPAR': 'first',
     'NOTAS_POR_POSTO': 'sum',
     'VALOR_TOTAL_RECOLHIDO': 'sum'
 }).reset_index()
 
-# Adiciona coluna de média por nota
 df_agrupado['MÉDIA_POR_NOTA'] = df_agrupado['VALOR_TOTAL_RECOLHIDO'] / df_agrupado['NOTAS_POR_POSTO']
 df_agrupado['MÉDIA_POR_NOTA'] = df_agrupado['MÉDIA_POR_NOTA'].fillna(0)
-
-# Ordena por valor recolhido
 df_agrupado = df_agrupado.sort_values('VALOR_TOTAL_RECOLHIDO', ascending=False)
 
-# Exibe a tabela
 st.dataframe(
     df_agrupado,
     column_config={
@@ -198,31 +220,25 @@ st.dataframe(
     hide_index=True
 )
 
-# ==================== TABELA POR CNPJ (SEM POSTO E SEM CNPJ CRU) ====================
-
 st.markdown("---")
+
+# ==================== ANÁLISE COMPLETA POR CNPJ ====================
 st.subheader("📋 ANÁLISE COMPLETA POR CNPJ")
 
-# Agrupa os dados por CNPJ
 df_cnpj = df.groupby('CNPJ_AMBIPAR').agg({
     'NOTAS_POR_POSTO': 'sum',
     'VALOR_TOTAL_RECOLHIDO': 'sum'
 }).reset_index()
 
-# Adiciona coluna de média por nota
 df_cnpj['MÉDIA_POR_NOTA'] = df_cnpj['VALOR_TOTAL_RECOLHIDO'] / df_cnpj['NOTAS_POR_POSTO']
 df_cnpj['MÉDIA_POR_NOTA'] = df_cnpj['MÉDIA_POR_NOTA'].fillna(0)
-
-# Ordena por valor recolhido
 df_cnpj = df_cnpj.sort_values('VALOR_TOTAL_RECOLHIDO', ascending=False)
 
-# Formata o CNPJ para exibição
 df_cnpj['CNPJ_FORMATADO'] = df_cnpj['CNPJ_AMBIPAR'].astype(str).str.zfill(14)
 df_cnpj['CNPJ_FORMATADO'] = df_cnpj['CNPJ_FORMATADO'].str.replace(
     r'(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})', r'\1.\2.\3/\4-\5', regex=True
 )
 
-# Exibe a tabela (somente CNPJ formatado, Notas, Valor e Média)
 st.dataframe(
     df_cnpj[['CNPJ_FORMATADO', 'NOTAS_POR_POSTO', 'VALOR_TOTAL_RECOLHIDO', 'MÉDIA_POR_NOTA']],
     column_config={
@@ -235,28 +251,29 @@ st.dataframe(
     hide_index=True
 )
 
-# ==================== TOP 10 CNPJs EM DESTAQUE ====================
-
 st.markdown("---")
+
+# ==================== TOP 10 CNPJs EM DESTAQUE ====================
 st.subheader("🏆 RESULTADOS COMPLETOS - TOP 10 CNPJs")
 
 col_top_valor, col_top_notas = st.columns(2)
 
-# Top 10 CNPJs por Valor (sem Posto Associado e sem CNPJ cru)
 with col_top_valor:
     st.markdown("### 💰 Maior Valor Recolhido")
     top10_valor = df_cnpj[['CNPJ_FORMATADO', 'VALOR_TOTAL_RECOLHIDO']].head(10)
+    # Criar uma cópia com valores formatados para exibição
+    top10_valor_display = top10_valor.copy()
+    top10_valor_display['VALOR_TOTAL_RECOLHIDO'] = top10_valor_display['VALOR_TOTAL_RECOLHIDO'].apply(formatar_real)
     st.dataframe(
-        top10_valor,
+        top10_valor_display,
         column_config={
             "CNPJ_FORMATADO": "CNPJ",
-            "VALOR_TOTAL_RECOLHIDO": st.column_config.NumberColumn("Valor (R$)", format="R$ %.2f"),
+            "VALOR_TOTAL_RECOLHIDO": "Valor (R$)",
         },
         hide_index=True,
         use_container_width=True
     )
 
-# Top 10 CNPJs por Notas (sem Posto Associado e sem CNPJ cru)
 with col_top_notas:
     st.markdown("### 📄 Maior Quantidade de Notas")
     top10_notas = df_cnpj[['CNPJ_FORMATADO', 'NOTAS_POR_POSTO']].head(10)
@@ -270,14 +287,15 @@ with col_top_notas:
         use_container_width=True
     )
 
-# ==================== DOWNLOAD DOS DADOS ====================
 st.markdown("---")
+
+# ==================== EXPORTAR DADOS ====================
 st.subheader("📥 Exportar Dados")
 
 col_download1, col_download2 = st.columns(2)
 
 with col_download1:
-    csv_postos = df_agrupado.to_csv(index=False).encode('utf-8')
+    csv_postos = df_agrupado.to_csv(index=False, decimal=',', sep=';').encode('utf-8')
     st.download_button(
         label="📎 Baixar dados por POSTO (CSV)",
         data=csv_postos,
@@ -286,9 +304,8 @@ with col_download1:
     )
 
 with col_download2:
-    # Para o CSV de CNPJ, usar o DataFrame sem as colunas removidas
     df_cnpj_export = df_cnpj[['CNPJ_FORMATADO', 'NOTAS_POR_POSTO', 'VALOR_TOTAL_RECOLHIDO', 'MÉDIA_POR_NOTA']]
-    csv_cnpjs = df_cnpj_export.to_csv(index=False).encode('utf-8')
+    csv_cnpjs = df_cnpj_export.to_csv(index=False, decimal=',', sep=';').encode('utf-8')
     st.download_button(
         label="📎 Baixar dados por CNPJ (CSV)",
         data=csv_cnpjs,
@@ -296,6 +313,5 @@ with col_download2:
         mime="text/csv",
     )
 
-# ==================== RODAPÉ ====================
 st.markdown("---")
 st.caption(f"📊 Dados atualizados | Total de registros: {len(df)} | Postos únicos: {total_postos} | CNPJs únicos: {total_cnpjs}")
