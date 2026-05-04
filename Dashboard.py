@@ -5,14 +5,19 @@ import plotly.graph_objects as go
 import openpyxl
 
 # Configuração da página
-st.set_page_config(
-    page_title="Dashboard LABORA/AMBIPAR",
-    page_icon="📊",
-    layout="wide"
-)
+with st.sidebar:
+    try:
+        logo = Image.open('logo_ambipar.png')
+        st.image(logo, use_container_width=True)
+    except:
+        st.image("https://via.placeholder.com/200x100?text=LABORA/AMBIPAR", use_container_width=True)
+    
+    st.markdown("---")
+    st.markdown("### 📊 Dashboard de Análise")
+    st.caption("Dados de recolha de notas fiscais")
 
-# Título principal
-st.title("📊 LABORA/AMBIPAR - ANÁLISE DE DADOS 📝")
+# ==================== TÍTULO PRINCIPAL ====================
+st.title("📊 LABORA/AMBIPAR - ANÁLISE DE DADOS")
 st.markdown("---")
 
 # Carrega a planilha
