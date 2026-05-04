@@ -16,11 +16,14 @@
 ## 📁 Estrutura da Planilha
 O dashboard espera uma planilha Excel com as seguintes colunas :
 
+````
 Coluna	Descrição
 A	      POSTO (nome do posto)
 D	      CNPJ AMBIPAR
 G	      NOTAS POR POSTO
 J	      VALOR TOTAL RECOLHIDO
+
+```
 
   ## 📦 Tecnologias Utilizadas
   
