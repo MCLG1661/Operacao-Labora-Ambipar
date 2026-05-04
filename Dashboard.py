@@ -7,7 +7,7 @@ import openpyxl
 # Configuração da página
 with st.sidebar:
     try:
-        logo = Image.open('logo_ambipar.png')
+        logo = Image.open('Labora_Logo_Novo_1_Laranja@2x.png')
         st.image(logo, use_container_width=True)
     except:
         st.image("https://via.placeholder.com/200x100?text=LABORA/AMBIPAR", use_container_width=True)
