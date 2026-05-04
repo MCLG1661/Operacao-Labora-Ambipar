@@ -7,6 +7,14 @@
 
 ### Dashboard Interativo para Análise de Recolha de Notas Fiscais por Posto e CNPJ.
 
+## 📋 Estrutura correta do seu projeto no GitHub :
+
+operacao-labora-ambipar/
+├── Dashboard.py           # Seu código principal
+├── requirements.txt       # Lista de bibliotecas
+├── PLANILHA.xlsx         # Sua planilha (opcional, se estiver no repositório)
+└── README.md             # Documentação (opcional)
+
 ### 🎯 Funcionalidades :
 
 - **Visão Geral**: Métricas principais (Total de Postos, CNPJs, Notas e Valor Recolhido)
