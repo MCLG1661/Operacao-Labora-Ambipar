@@ -7,7 +7,7 @@
 
 ### Dashboard Interativo para Análise de Recolha de Notas Fiscais por Posto e CNPJ.
 
-## 📋 Estrutura correta do seu projeto no GitHub :
+## 📋 Estrutura do projeto :
 
 ```
 operacao-labora-ambipar/
