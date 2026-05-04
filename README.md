@@ -11,8 +11,8 @@
 
 ```
 operacao-labora-ambipar/
-├── Dashboard.py           # Seu código principal
-├── requirements.txt       # Lista de bibliotecas
+├── Dashboard.py          # Seu código principal
+├── requirements.txt      # Lista de bibliotecas
 ├── PLANILHA.xlsx         # Sua planilha (opcional, se estiver no repositório)
 └── README.md             # Documentação (opcional)
 
