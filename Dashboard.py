@@ -22,7 +22,7 @@ st.set_page_config(
 # ==================== LOGO NA BARRA LATERAL ====================
 with st.sidebar:
     try:
-        logo = Image.open('logo_ambipar.png')
+        logo = Image.open('Labora_Logo_Novo_1_Laranja@2x')
         st.image(logo, use_container_width=True)
     except:
         st.image("https://via.placeholder.com/300x100?text=LABORA/AMBIPAR", use_container_width=True)
