@@ -25,13 +25,16 @@ J	      VALOR TOTAL RECOLHIDO
 
 ```
 
-  ## 📦 Tecnologias Utilizadas
-  
+## 📦 Tecnologias Utilizadas
+
+```  
 Tecnologia	Finalidade
 Streamlit	  Interface do dashboard
 Pandas	    Manipulação e análise de dados
 Plotly	    Gráficos interativos
 OpenPyXL	  Leitura de arquivos Excel
+
+```
 
 ## 📸 Preview do Dashboard
 
