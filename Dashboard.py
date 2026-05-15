@@ -29,7 +29,7 @@ with st.sidebar:
     
     st.markdown("---")
     st.caption("📊 Dashboard de Análise de Dados")
-    st.caption(f"📅 Última atualização: Abril 2025")
+    st.caption(f"📅 Última atualização: Maio 2026")
 
 # ==================== TÍTULO PRINCIPAL ====================
 st.title("📊 LABORA/AMBIPAR - ANÁLISE DE DADOS")
@@ -39,7 +39,7 @@ st.markdown("---")
 @st.cache_data
 def carregar_dados():
     df = pd.read_excel(
-        'PLANILHA DE RECOLHA DE NOTAS.xlsx',
+        'PLANILHA DE RECOLHA DE NOTAS MAIO.xlsx',
         engine='openpyxl'
     )
     # Renomeia as colunas
