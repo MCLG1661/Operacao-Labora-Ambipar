@@ -28,7 +28,7 @@ with st.sidebar:
         st.image("https://via.placeholder.com/300x100?text=LABORA/AMBIPAR", use_container_width=True)
     
     st.markdown("---")
-    st.caption("📊 Dashboard de Análise de Dados")
+    st.caption("📊 Dashboard de Análise de Dados - Maio")
     st.caption(f"📅 Última atualização: 01 de Junho 2026")
 
 # ==================== TÍTULO PRINCIPAL ====================
