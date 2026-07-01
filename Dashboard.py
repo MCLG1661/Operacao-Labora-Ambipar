@@ -276,7 +276,10 @@ with col_top_valor:
 
 with col_top_notas:
     st.markdown("### 📄 Maior Quantidade de Notas")
-    top10_notas = df_cnpj[['CNPJ_FORMATADO', 'NOTAS_POR_POSTO']].head(10)
+    
+    # Ordena do maior para o menor antes de pegar os 10 primeiros
+    top10_notas = df_cnpj.sort_values(by='NOTAS_POR_POSTO', ascending=False).head(10)
+    
     st.dataframe(
         top10_notas,
         column_config={
