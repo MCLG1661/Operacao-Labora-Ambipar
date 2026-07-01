@@ -286,7 +286,7 @@ with col_top_notas:
             "CNPJ_FORMATADO": "CNPJ",
             "NOTAS_POR_POSTO": st.column_config.NumberColumn(
                 "Notas",
-                format="R$ %.2f"  # Formato monetário com 2 casas decimais
+                format="%d"  # Apenas número inteiro, sem R$
             ),
         },
         hide_index=True,
