@@ -29,10 +29,10 @@ with st.sidebar:
     
     st.markdown("---")
     st.caption("📊 Dashboard de Análise de Dados")
-    st.caption(f"📅 Última atualização: 19 de Junho 2026")
+    st.caption(f"📅 Última atualização: 01 de Julho 2026")
 
 # ==================== TÍTULO PRINCIPAL ====================
-st.title("📊 LABORA/AMBIPAR - ANÁLISE DE DADOS - JUNHO - PRIMEIROS 15 DIAS")
+st.title("📊 LABORA/AMBIPAR - ANÁLISE DE DADOS - JUNHO")
 st.markdown("---")
 
 # ==================== CARREGAR DADOS ====================
